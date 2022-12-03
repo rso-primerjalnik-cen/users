@@ -28,24 +28,9 @@ class KeycloakUsersRepository(object):
                     ADMIN_SECRET=settings.KEYCLOAK_ADMIN_SECRET,
                     REALM_NAME=settings.KEYCLOAK_REALM,
                     CLIENT_ID=settings.KEYCLOAK_CLIENT_ID,
+                    CLIENT_SECRET_KEY=settings.KEYCLOAK_CLIENT_SECRET_KEY,
                     REDIRECT_URL=settings.KEYCLOAK_REDIRECT_URL,
                     SSL_VERIFY=settings.KEYCLOAK_SSL_VERIFY)
-
-    @property
-    def groups_cache_key(self):
-        return 'keycloak:groups'
-
-    @property
-    def roles_cache_key(self):
-        return 'keycloak:roles'
-
-    @property
-    def users_cache_key(self):
-        return 'keycloak:users'
-
-    @property
-    def client_cache_key(self):
-        return 'keycloak:client'
 
     @property
     def keycloak(self) -> KeycloakManager:
@@ -68,8 +53,7 @@ class KeycloakUsersRepository(object):
         return to_keycloak_user(await self.get_user_raw(user_id))
 
     async def get_user_raw(self, user_id: str) -> dict:
-        key = f'{self.users_cache_key}:{user_id}'
-        return await self.keycloak.get_user(user_id)
+        return self.keycloak.get_user(user_id)
 
     def delete_user(self, user_id: str):
         self.keycloak.delete_user(user_id)

@@ -3,3 +3,5 @@ uvicorn==0.12
 pydantic[dotenv]==1.8.2
 requests>=2.26.0
 python-keycloak~=0.25
+python-dateutil==2.8.2
+itsdangerous~=2.0
