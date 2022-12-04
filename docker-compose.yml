@@ -1,15 +1,11 @@
 version: "3.8"
 
 services:
-  api:
-    build:
-      context: ./
-      dockerfile: Dockerfile
+  users_api:
+    image: lan123/rso-projekt:users
+    container_name: users
+    restart: always
     ports:
       - "8001:8001"
-    working_dir: /code/
-    volumes:
-      - .:/code
-    command: sh -c "python app"
     environment:
       PYTHONPATH: "/code/"
