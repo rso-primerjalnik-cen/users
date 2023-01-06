@@ -2,8 +2,11 @@ version: "3.8"
 
 services:
   users_api:
-    image: lan123/rso-projekt:users
-    container_name: users
+#    image: lan123/rso-projekt:users
+#    container_name: users
+    build:
+      context: ./
+      dockerfile: Dockerfile
     ports:
       - "8001:8001"
     environment:

@@ -41,8 +41,10 @@ def get_keycloak_openid() -> KeycloakOpenID:
 
 class KeycloakOpenIDAuthBackend(AuthenticationBackend):
     async def authenticate(self, conn: HTTPConnection) -> Optional[Tuple[AuthCredentials, BaseUser]]:
+        # if is_endpoint_allow_any(endpoint):
+        #     return AuthCredentials(['unauthenticated']), UnauthenticatedUser()
         endpoint = conn.scope.get('path')
-        if is_endpoint_allow_any(endpoint):
+        if endpoint in ['/docs', '/openapi.json']:
             return AuthCredentials(['unauthenticated']), UnauthenticatedUser()
 
         # Always allow OPTIONS requests, so Nuxt Auth lib and FastAPI CORS middleware can handle CORS properly
