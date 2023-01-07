@@ -32,11 +32,11 @@ def mark_endpoint_as_allow_any(endpoint: str):
 
 def get_keycloak_openid() -> KeycloakOpenID:
     settings = get_settings()
-    return KeycloakOpenID(server_url=settings.KEYCLOAK_API,
-                          client_id=settings.KEYCLOAK_CLIENT_ID,
-                          realm_name=settings.KEYCLOAK_REALM,
-                          client_secret_key=settings.KEYCLOAK_CLIENT_SECRET_KEY,
-                          verify=settings.KEYCLOAK_SSL_VERIFY)
+    return KeycloakOpenID(server_url=settings.get_keycloak_api(),
+                          client_id=settings.get_keycloak_client_id(),
+                          realm_name=settings.get_keycloak_realm(),
+                          client_secret_key=settings.get_keycloak_client_secret_key(),
+                          verify=settings.get_keycloak_ssl_verify())
 
 
 class KeycloakOpenIDAuthBackend(AuthenticationBackend):
@@ -44,7 +44,7 @@ class KeycloakOpenIDAuthBackend(AuthenticationBackend):
         # if is_endpoint_allow_any(endpoint):
         #     return AuthCredentials(['unauthenticated']), UnauthenticatedUser()
         endpoint = conn.scope.get('path')
-        if endpoint in ['/docs', '/openapi.json']:
+        if endpoint in ['/docs', '/openapi.json', '/api/v1/users/']:
             return AuthCredentials(['unauthenticated']), UnauthenticatedUser()
 
         # Always allow OPTIONS requests, so Nuxt Auth lib and FastAPI CORS middleware can handle CORS properly

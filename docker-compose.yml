@@ -11,3 +11,9 @@ services:
       - "8001:8001"
     environment:
       PYTHONPATH: "/code/"
+    networks:
+      - internal-network
+
+networks:
+  internal-network:
+    driver: bridge

@@ -16,32 +16,6 @@ spec:
         - image: lan123/rso-projekt:users
           imagePullPolicy: "Always"
           name: users-api
-          env:
-            - name: KEYCLOAK_API
-              value: https://dev.infincrypt.com/auth/
-            - name: KEYCLOAK_REALM
-              value: lan_faks
-            - name: KEYCLOAK_CLIENT_ID
-              value: rso
-            - name: KEYCLOAK_REDIRECT_URL
-              value: https://dev.infincrypt.com/*
-            - name: KEYCLOAK_SSL_VERIFY
-              value: true
-            - name: KEYCLOAK_CLIENT_SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: kc-client-secret
-                  key: KEYCLOAK_CLIENT_SECRET_KEY
-            - name: KEYCLOAK_ADMIN_USER
-              valueFrom:
-                secretKeyRef:
-                  name: kc-admin-user
-                  key: KEYCLOAK_ADMIN_USER
-            - name: KEYCLOAK_ADMIN_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: kc-admin-secret
-                  key: KEYCLOAK_ADMIN_SECRET
           ports:
             - containerPort: 8001
               name: server

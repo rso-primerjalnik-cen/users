@@ -23,14 +23,14 @@ class KeycloakUsersRepository(object):
     @property
     def config(self) -> dict:
         settings = get_settings()
-        return dict(HOST=settings.KEYCLOAK_API,
-                    ADMIN_USER=settings.KEYCLOAK_ADMIN_USER,
-                    ADMIN_SECRET=settings.KEYCLOAK_ADMIN_SECRET,
-                    REALM_NAME=settings.KEYCLOAK_REALM,
-                    CLIENT_ID=settings.KEYCLOAK_CLIENT_ID,
-                    CLIENT_SECRET_KEY=settings.KEYCLOAK_CLIENT_SECRET_KEY,
-                    REDIRECT_URL=settings.KEYCLOAK_REDIRECT_URL,
-                    SSL_VERIFY=settings.KEYCLOAK_SSL_VERIFY)
+        return dict(HOST=settings.get_keycloak_api(),
+                    ADMIN_USER=settings.get_keycloak_admin_user(),
+                    ADMIN_SECRET=settings.get_keycloak_admin_secret(),
+                    REALM_NAME=settings.get_keycloak_realm(),
+                    CLIENT_ID=settings.get_keycloak_client_id(),
+                    CLIENT_SECRET_KEY=settings.get_keycloak_client_secret_key(),
+                    REDIRECT_URL=settings.get_keycloak_redirect_url(),
+                    SSL_VERIFY=settings.get_keycloak_ssl_verify())
 
     @property
     def keycloak(self) -> KeycloakManager:
