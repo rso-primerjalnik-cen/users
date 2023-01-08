@@ -1,12 +1,31 @@
-import json
-
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, HTTPException
+from starlette import status
 
 from app.api.serializers.users import UpdateUserProfile
+from app.common.settings import get_settings
 from app.common.users.repository import KeycloakUsersRepository
 from app.common.users.utils import to_keycloak_user
 
 router = APIRouter(prefix='/users', tags=['Users'])
+
+
+@router.get('/health/live/')
+async def health_check_liveness():
+    s = get_settings()
+    liveness_check = s.get_liveness_check()
+    if liveness_check == 'bad':
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail='Liveness check failed')
+    return dict(status='OK')
+
+
+@router.get('/health/ready/')
+async def health_check_readiness():
+    repo = KeycloakUsersRepository()
+    try:
+        repo.get_users()
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(e))
+    return dict(status='OK')
 
 
 @router.get('/')

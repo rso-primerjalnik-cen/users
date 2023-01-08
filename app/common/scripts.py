@@ -14,3 +14,4 @@ def post_consul_config():
     c.kv.put('KEYCLOAK_REDIRECT_URL', os.getenv('KEYCLOAK_REDIRECT_URL'))
     c.kv.put('KEYCLOAK_SSL_VERIFY', os.getenv('KEYCLOAK_SSL_VERIFY'))
     c.kv.put('KEYCLOAK_CLIENT_SECRET_KEY', os.getenv('KEYCLOAK_CLIENT_SECRET_KEY'))
+    c.kv.put('USERS_LIVENESS_CHECK', os.getenv('USERS_LIVENESS_CHECK'))

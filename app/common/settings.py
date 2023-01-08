@@ -11,6 +11,7 @@ class Settings(object):
     KEYCLOAK_SSL_VERIFY: bool = False
     KEYCLOAK_CLIENT_SECRET_KEY: str = None
     CONSUL_HOST = 'my-consul'
+    USERS_LIVENESS_CHECK = 'good'
 
     def __init__(self):
         import os
@@ -19,6 +20,13 @@ class Settings(object):
         consul_host = os.getenv('CONSUL_HOST')
         self.CONSUL_HOST = consul_host if consul_host else self.CONSUL_HOST
         self.c = Consul(host=self.CONSUL_HOST)
+
+    def get_liveness_check(self):
+        index = None
+        index, data = self.c.kv.get('USERS_LIVENESS_CHECK', index=index)
+        if data is not None:
+            self.USERS_LIVENESS_CHECK = data['Value'].decode("utf-8")
+        return self.USERS_LIVENESS_CHECK
 
     def get_keycloak_api(self):
         index = None
@@ -66,7 +74,7 @@ class Settings(object):
         index = None
         index, data = self.c.kv.get('KEYCLOAK_SSL_VERIFY', index=index)
         if data is not None:
-            self.KEYCLOAK_SSL_VERIFY = data['Value'].decode("utf-8")
+            self.KEYCLOAK_SSL_VERIFY = data['Value'].decode("utf-8") == 'true'
         return self.KEYCLOAK_SSL_VERIFY
 
     def get_keycloak_client_secret_key(self):

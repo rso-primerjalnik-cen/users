@@ -11,7 +11,7 @@ class KeycloakManager(KeycloakAdmin):
                          realm_name=self.realm,
                          password=self.admin_password,
                          username=self.admin_username,
-                         verify=config.get('SSL_VERIFY', '') == 'true')
+                         verify=config.get('SSL_VERIFY', False))
 
     @property
     def admin_username(self) -> str:
