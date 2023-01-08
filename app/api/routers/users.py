@@ -1,10 +1,15 @@
+from typing import List
+
+import strawberry
 from fastapi import APIRouter, Request, HTTPException
 from starlette import status
+from strawberry.fastapi import GraphQLRouter
+from strawberry.scalars import JSON
 
 from app.api.serializers.users import UpdateUserProfile
 from app.common.settings import get_settings
 from app.common.users.repository import KeycloakUsersRepository
-from app.common.users.utils import to_keycloak_user
+from app.common.users.utils import to_keycloak_user, from_keycloak_user
 
 router = APIRouter(prefix='/users', tags=['Users'])
 
@@ -50,7 +55,7 @@ async def get_user_profile(request: Request):
 
 
 @router.patch('/profile/{user_id}/')
-async def update_user(user_id: str, request: Request, user_data: UpdateUserProfile):
+async def update_user(user_id: str, user_data: UpdateUserProfile):
     user_repo: KeycloakUsersRepository = KeycloakUsersRepository()
     user = await user_repo.update_user(user_id=user_id, user=to_keycloak_user(user_data.dict()))
 
@@ -81,3 +86,27 @@ async def update_user_email(user_id: str, request: Request, user_data: UpdateUse
                 country=user.country,
                 date_of_birth=user.date_of_birth
                 )
+
+
+#####################################################
+#####################################################
+################## GraphQL API ######################
+#####################################################
+#####################################################
+
+
+@strawberry.type
+class Query:
+    @strawberry.field
+    def all_users(self) -> JSON:
+        return [from_keycloak_user(u) for u in KeycloakUsersRepository().get_users()]
+
+    @strawberry.field
+    async def user_profile(self, user_uuid: str) -> JSON:
+        user_repo: KeycloakUsersRepository = KeycloakUsersRepository()
+        user = await user_repo.get_user(user_uuid)
+        return from_keycloak_user(user)
+
+
+schema = strawberry.Schema(Query)
+graphql_router = GraphQLRouter(schema)

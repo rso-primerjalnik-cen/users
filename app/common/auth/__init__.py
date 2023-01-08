@@ -48,6 +48,9 @@ class KeycloakOpenIDAuthBackend(AuthenticationBackend):
                         '/api/v1/users/health/ready/']:
             return AuthCredentials(['unauthenticated']), UnauthenticatedUser()
 
+        if endpoint.startswith('/api/v1/users/graphql'):
+            return AuthCredentials(['unauthenticated']), UnauthenticatedUser()
+
         # Always allow OPTIONS requests, so Nuxt Auth lib and FastAPI CORS middleware can handle CORS properly
         if conn.scope.get('method', None) == 'OPTIONS':
             return AuthCredentials(['unauthenticated']), UnauthenticatedUser()
