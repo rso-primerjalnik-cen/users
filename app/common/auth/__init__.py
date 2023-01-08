@@ -44,7 +44,7 @@ class KeycloakOpenIDAuthBackend(AuthenticationBackend):
         # if is_endpoint_allow_any(endpoint):
         #     return AuthCredentials(['unauthenticated']), UnauthenticatedUser()
         endpoint = conn.scope.get('path')
-        if endpoint in ['/docs', '/openapi.json', '/api/v1/users/', '/api/v1/users/health/live/',
+        if endpoint in ['/api/v1/users/docs', '/openapi.json', '/api/v1/users/', '/api/v1/users/health/live/',
                         '/api/v1/users/health/ready/']:
             return AuthCredentials(['unauthenticated']), UnauthenticatedUser()
 
